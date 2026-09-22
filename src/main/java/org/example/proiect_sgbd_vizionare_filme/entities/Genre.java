@@ -1,4 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.concrete_classes;
+package org.example.proiect_sgbd_vizionare_filme.entities;
 
 public class Genre {
 
@@ -14,3 +14,4 @@ public class Genre {
         return genre_name;
     }
 }
+

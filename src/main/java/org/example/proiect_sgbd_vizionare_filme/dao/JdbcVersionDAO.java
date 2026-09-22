@@ -1,7 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.JdbcDAO;
-
-import org.example.proiect_sgbd_vizionare_filme.DAO.VersionDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.MovieVersion;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,9 +1,5 @@
-package org.example.proiect_sgbd_vizionare_filme.JdbcDAO;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
-import org.example.proiect_sgbd_vizionare_filme.DAO.MovieCastDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Actor;
-
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,7 +1,6 @@
-package org.example.proiect_sgbd_vizionare_filme.JdbcDAO;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
-import org.example.proiect_sgbd_vizionare_filme.DAO.UserDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.User;
+import org.example.proiect_sgbd_vizionare_filme.entities.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

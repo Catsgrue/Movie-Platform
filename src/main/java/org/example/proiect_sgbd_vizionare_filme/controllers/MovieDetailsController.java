@@ -14,9 +14,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.proiect_sgbd_vizionare_filme.JdbcDAO.*;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.*;
-import org.example.proiect_sgbd_vizionare_filme.database.Database;
+import org.example.proiect_sgbd_vizionare_filme.dao.*;
+import org.example.proiect_sgbd_vizionare_filme.entities.*;
+import org.example.proiect_sgbd_vizionare_filme.config.Database;
 
 import java.io.IOException;
 import java.io.InputStream;

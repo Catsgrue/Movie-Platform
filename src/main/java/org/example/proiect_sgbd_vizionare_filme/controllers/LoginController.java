@@ -10,9 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import org.example.proiect_sgbd_vizionare_filme.JdbcDAO.JdbcUserDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.User;
-import org.example.proiect_sgbd_vizionare_filme.database.Database;
+import org.example.proiect_sgbd_vizionare_filme.dao.JdbcUserDAO;
+import org.example.proiect_sgbd_vizionare_filme.entities.User;
+import org.example.proiect_sgbd_vizionare_filme.config.Database;
 
 import java.io.IOException;
 import java.sql.Connection;

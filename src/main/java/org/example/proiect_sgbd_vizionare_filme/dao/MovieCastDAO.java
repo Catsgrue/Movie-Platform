@@ -1,6 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.DAO;
-
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Actor;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
 import java.util.List;
 

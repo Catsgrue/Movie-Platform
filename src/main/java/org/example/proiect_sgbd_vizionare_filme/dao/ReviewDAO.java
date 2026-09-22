@@ -1,6 +1,6 @@
-package org.example.proiect_sgbd_vizionare_filme.DAO;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Review;
+import org.example.proiect_sgbd_vizionare_filme.entities.Review;
 
 import java.util.List;
 

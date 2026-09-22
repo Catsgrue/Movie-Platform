@@ -15,17 +15,16 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.proiect_sgbd_vizionare_filme.JdbcDAO.JdbcGenreDAO;
-import org.example.proiect_sgbd_vizionare_filme.JdbcDAO.JdbcMovieDAO;
-import org.example.proiect_sgbd_vizionare_filme.JdbcDAO.JdbcUserDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Genre;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Movie;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.User;
-import org.example.proiect_sgbd_vizionare_filme.database.Database;
+import org.example.proiect_sgbd_vizionare_filme.dao.JdbcGenreDAO;
+import org.example.proiect_sgbd_vizionare_filme.dao.JdbcMovieDAO;
+import org.example.proiect_sgbd_vizionare_filme.dao.JdbcUserDAO;
+import org.example.proiect_sgbd_vizionare_filme.entities.Genre;
+import org.example.proiect_sgbd_vizionare_filme.entities.Movie;
+import org.example.proiect_sgbd_vizionare_filme.entities.User;
+import org.example.proiect_sgbd_vizionare_filme.config.Database;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import java.sql.Connection;

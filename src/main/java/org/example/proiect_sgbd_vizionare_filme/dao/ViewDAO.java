@@ -1,6 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.DAO;
-
-import java.sql.Date;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
 public interface ViewDAO {
 

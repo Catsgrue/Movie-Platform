@@ -1,4 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.database;
+package org.example.proiect_sgbd_vizionare_filme.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

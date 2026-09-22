@@ -1,6 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.JdbcDAO;
-
-import org.example.proiect_sgbd_vizionare_filme.DAO.ViewDAO;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
 import java.sql.*;
 

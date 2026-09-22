@@ -1,7 +1,6 @@
-package org.example.proiect_sgbd_vizionare_filme.JdbcDAO;
+package org.example.proiect_sgbd_vizionare_filme.dao;
 
-import org.example.proiect_sgbd_vizionare_filme.DAO.MovieDAO;
-import org.example.proiect_sgbd_vizionare_filme.concrete_classes.Movie;
+import org.example.proiect_sgbd_vizionare_filme.entities.Movie;
 
 import java.sql.*;
 import java.util.ArrayList;

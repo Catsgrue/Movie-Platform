@@ -1,4 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.concrete_classes;
+package org.example.proiect_sgbd_vizionare_filme.entities;
 
 import java.sql.Date;
 
