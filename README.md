@@ -31,19 +31,19 @@
 
 <h3>1. User Authentication</h3>
 <div align="center">
-  <img src="Login.png" alt="Login Screen" width="700"/>
+  <img src="images/Login.png" alt="Login Screen" width="700"/>
 </div>
 
 <h3>2. Main Dashboard & Catalog</h3>
 <div align="center">
-  <img src="Dashboard.png" alt="Dashboard Screen" width="700"/>
+  <img src="images/Dashboard.png" alt="Dashboard Screen" width="700"/>
 </div>
 
 <h3>3. Movie Details & Interactions</h3>
 <div align="center">
-  <img src="MovieDetails1.png" alt="Movie Details Screen 1" width="700"/>
-  <img src="MovieDetails2.png" alt="Movie Details Screen 2" width="700"/>
-  <img src="MovieDetails3.png" alt="Movie Details Screen 3" width="700"/>
+  <img src="images/MovieDetails1.png" alt="Movie Details Screen 1" width="700"/>
+  <img src="images/MovieDetails2.png" alt="Movie Details Screen 2" width="700"/>
+  <img src="images/MovieDetails3.png" alt="Movie Details Screen 3" width="700"/>
 </div>
 
 <hr>
