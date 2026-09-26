@@ -1,5 +1,6 @@
 package org.example.proiect_sgbd_vizionare_filme.dao;
 
+import org.example.proiect_sgbd_vizionare_filme.daoInterfaces.ReviewDAO;
 import org.example.proiect_sgbd_vizionare_filme.entities.Review;
 
 import java.sql.Connection;
@@ -22,12 +23,12 @@ public class JdbcReviewDAO implements ReviewDAO {
         String sql = "INSERT INTO reviews (id_review,id_view,rating,comment_text,predefined_option,sentiment_score) VALUES (?,?,?,?,?,?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, review.getId_review());
-            p.setInt(2, review.getId_view());
+            p.setInt(1, review.getId());
+            p.setInt(2, review.getIdView());
             p.setInt(3, review.getRating());
-            p.setString(4, review.getComment_text());
-            p.setString(5, review.getPredefined_option());
-            p.setString(6, review.getSentiment_score());
+            p.setString(4, review.getCommentText());
+            p.setString(5, review.getPredefinedOption());
+            p.setString(6, review.getSentimentScore());
 
             p.executeUpdate();
             System.out.println("Review was added!");

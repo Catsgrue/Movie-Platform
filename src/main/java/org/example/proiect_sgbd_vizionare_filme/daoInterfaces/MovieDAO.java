@@ -1,4 +1,4 @@
-package org.example.proiect_sgbd_vizionare_filme.dao;
+package org.example.proiect_sgbd_vizionare_filme.daoInterfaces;
 
 import org.example.proiect_sgbd_vizionare_filme.entities.Movie;
 

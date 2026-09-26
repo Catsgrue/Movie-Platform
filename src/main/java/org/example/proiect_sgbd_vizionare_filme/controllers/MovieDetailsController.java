@@ -14,145 +14,141 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.proiect_sgbd_vizionare_filme.dao.*;
-import org.example.proiect_sgbd_vizionare_filme.entities.*;
-import org.example.proiect_sgbd_vizionare_filme.config.Database;
+import org.example.proiect_sgbd_vizionare_filme.entities.Actor;
+import org.example.proiect_sgbd_vizionare_filme.entities.Genre;
+import org.example.proiect_sgbd_vizionare_filme.entities.Movie;
+import org.example.proiect_sgbd_vizionare_filme.entities.Review;
+import org.example.proiect_sgbd_vizionare_filme.services.MovieDetailsService;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.List;
-import java.util.Random;
 
 public class MovieDetailsController {
 
-    @FXML
-    private ImageView moviePoster;
-
-    @FXML
-    private HBox castContainer;
-
-    @FXML
-    private Label star1;
-
-    @FXML
-    private Label star2;
-
-    @FXML
-    private Label star3;
-
-    @FXML
-    private Label star4;
-
-    @FXML
-    private Label star5;
-
-    @FXML
-    private ComboBox<String> predefinedOptionComboBox;
-
-    @FXML
-    private ComboBox<String> languageComboBox;
-
-    @FXML
-    private ComboBox<String> formatComboBox;
-
-
-    @FXML
-    private TextArea commentArea;
-
-    @FXML
-    private VBox reviewsListContainer;
-
-    @FXML
-    private Label titleLabel;
-
-    @FXML
-    private Label genreLabel;
-
-    @FXML
-    private Label yearLabel;
-
-    @FXML
-    private Label ratingLabel;
-
-    @FXML
-    private Label descriptionLabel;
-
-    @FXML
-    private Label usernameLabel;
-
+    @FXML private ImageView moviePoster;
+    @FXML private HBox castContainer;
+    @FXML private Label star1, star2, star3, star4, star5;
+    @FXML private ComboBox<String> predefinedOptionComboBox;
+    @FXML private ComboBox<String> languageComboBox;
+    @FXML private ComboBox<String> formatComboBox;
+    @FXML private TextArea commentArea;
+    @FXML private VBox reviewsListContainer;
+    @FXML private Label titleLabel, genreLabel, yearLabel, ratingLabel, descriptionLabel, usernameLabel;
 
     private String currentUser;
     private int id_movie;
     private int currentRating = 0;
 
+    private final MovieDetailsService detailsService = new MovieDetailsService();
+
     @FXML
-    public void initialize(int id,String currentUser) throws Exception {
+    public void initialize(int id, String currentUser) {
+        this.currentUser = currentUser;
+        this.id_movie = id;
 
-        this.currentUser=currentUser;
-        this.id_movie=id;
-
-        setCurrentUser();
-        setMovieDetails(id);
-        setFormatComboBox(id);
-        setLanguageComboBox(id);
+        usernameLabel.setText(this.currentUser);
         populatePredefinedOptions();
-        populateCast(id);
 
-        loadReviews();
+        try {
+            setMovieDetails(id);
+            setFormatComboBox(id);
+            setLanguageComboBox(id);
+            populateCast(id);
+            loadReviews();
+        } catch (Exception e) {
+            System.err.println("Error initializing the details page:" + e.getMessage());
+        }
     }
 
-    public void populateCast(int id) throws Exception{
-        Connection con=Database.getConnection();
-        JdbcMovieCastDAO movieCastDAO=new JdbcMovieCastDAO(con);
+    private void setMovieDetails(int id) throws Exception {
+        Movie movie = detailsService.getMovieById(id);
 
-        List<Integer> idActors=movieCastDAO.getId_ActorsByMovieId(id);
+        if (movie != null) {
+            titleLabel.setText(movie.getTitle());
+            ratingLabel.setText(Double.toString(movie.getRatingMediu()));
+            descriptionLabel.setText(movie.getDescription());
+            yearLabel.setText("Release date: " + movie.getReleaseDate());
 
-        if(idActors!=null){
-            JdbcActorDAO actorDAO=new JdbcActorDAO(con);
-            List<Actor> actors=actorDAO.getActorsById_Actors(idActors);
+            String imagePath = movie.getImageURL();
 
-            for(Actor a:actors){
-                VBox actorCard = new VBox(10);
-                actorCard.setAlignment(Pos.CENTER);
-                actorCard.setStyle("-fx-padding: 10; -fx-background-color: #222222; -fx-background-radius: 8;");
-
-                ImageView posterView = new ImageView();
-                posterView.setFitWidth(160);
-                posterView.setFitHeight(240);
-                posterView.setPreserveRatio(true);
-
-                String imagePath = "/org/example/actor-posters/" + a.getStage_name() + ".jpg";
-                InputStream imageStream = getClass().getResourceAsStream(imagePath);
-
-                if (imageStream != null) {
-                    posterView.setImage(new Image(imageStream));
-                } else {
-                    InputStream defaultStream = getClass().getResourceAsStream("/org/example/actor-posters/default_poster.jpg");
-                    if(defaultStream != null) {
-                        posterView.setImage(new Image(defaultStream));
-                    }
-                }
-
-                String role=movieCastDAO.getRoleByIdActor(a.getId_actor(),id);
-                if (role != null) {
-                    Label titleLabel = new Label(a.getStage_name() + "(" + role + ")");
-                    titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
-                    titleLabel.setMaxWidth(160);
-                    titleLabel.setWrapText(true);
-                    titleLabel.setAlignment(Pos.CENTER);
-
-                    actorCard.getChildren().addAll(posterView, titleLabel);
-                    castContainer.getChildren().add(actorCard);
-
-                }else continue;
+            if (imagePath == null || imagePath.trim().isEmpty()) {
+                imagePath = "/org/example/movie-posters/default_poster.jpg";
             }
-        }else return ;
+
+            InputStream imageStream = getClass().getResourceAsStream(imagePath);
+            if (imageStream != null) {
+                moviePoster.setImage(new Image(imageStream));
+            } else {
+                InputStream defaultStream = getClass().getResourceAsStream("/org/example/movie-posters/default_poster.jpg");
+                if (defaultStream != null) {
+                    moviePoster.setImage(new Image(defaultStream));
+                }
+            }
+
+            Genre genre = detailsService.getGenreById(movie.getId());
+            if (genre != null) {
+                genreLabel.setText("Genre: " + genre.getName());
+            }
+        }
     }
 
-    public void populatePredefinedOptions() {
-        predefinedOptionComboBox.getItems().clear();
+    private void setFormatComboBox(int id_movie) throws Exception {
+        formatComboBox.getItems().clear();
+        formatComboBox.getItems().addAll(detailsService.getFormats(id_movie));
+    }
 
+    private void setLanguageComboBox(int id_movie) throws Exception {
+        languageComboBox.getItems().clear();
+        languageComboBox.getItems().addAll(detailsService.getLanguages(id_movie));
+    }
+
+    private void populateCast(int id) throws Exception {
+        List<Actor> actors = detailsService.getMovieActors(id);
+
+        for (Actor a : actors) {
+            VBox actorCard = new VBox(10);
+            actorCard.setAlignment(Pos.CENTER);
+            actorCard.setStyle("-fx-padding: 10; -fx-background-color: #222222; -fx-background-radius: 8;");
+
+            ImageView posterView = new ImageView();
+            posterView.setFitWidth(160);
+            posterView.setFitHeight(240);
+            posterView.setPreserveRatio(true);
+
+            String imagePath = a.getImageURL();
+
+            if (imagePath == null || imagePath.trim().isEmpty()) {
+                imagePath = "/org/example/actor-posters/default_poster.jpg";
+            }
+
+            InputStream imageStream = getClass().getResourceAsStream(imagePath);
+            if (imageStream != null) {
+                posterView.setImage(new Image(imageStream));
+            } else {
+                InputStream defaultStream = getClass().getResourceAsStream("/org/example/actor-posters/default_poster.jpg");
+                if (defaultStream != null) {
+                    posterView.setImage(new Image(defaultStream));
+                }
+            }
+
+            String role = detailsService.getActorRole(a.getId(), id);
+
+            if (role != null) {
+                Label nameLabel = new Label(a.getStageName() + " (" + role + ")");
+                nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+                nameLabel.setMaxWidth(160);
+                nameLabel.setWrapText(true);
+                nameLabel.setAlignment(Pos.CENTER);
+
+                actorCard.getChildren().addAll(posterView, nameLabel);
+                castContainer.getChildren().add(actorCard);
+            }
+        }
+    }
+
+    private void populatePredefinedOptions() {
+        predefinedOptionComboBox.getItems().clear();
         predefinedOptionComboBox.getItems().addAll(
                 "An absolute masterpiece",
                 "Great acting and visuals",
@@ -164,63 +160,8 @@ public class MovieDetailsController {
         );
     }
 
-    public void setFormatComboBox(int id_movie) throws Exception {
-        Connection con = Database.getConnection();
-        JdbcVersionDAO versionDAO = new JdbcVersionDAO(con);
-
-        List<String> formats = versionDAO.getFormatsByMovieId(id_movie);
-
-        formatComboBox.getItems().clear();
-        formatComboBox.getItems().addAll(formats);
-    }
-
-    public void setLanguageComboBox(int id_movie) throws Exception {
-        Connection con = Database.getConnection();
-        JdbcVersionDAO versionDAO = new JdbcVersionDAO(con);
-
-        List<String> languages = versionDAO.getLanguagesByMovieId(id_movie);
-
-        languageComboBox.getItems().clear();
-        languageComboBox.getItems().addAll(languages);
-    }
-
-    public void setMovieDetails(int id) throws Exception {
-        Connection con= Database.getConnection();
-        JdbcMovieDAO movieDAO=new JdbcMovieDAO(con);
-        JdbcGenreDAO genreDAO=new JdbcGenreDAO(con);
-
-        Movie movie=movieDAO.getMovieById(id);
-
-        if(movie!=null){
-            titleLabel.setText(movie.getTitle());
-            ratingLabel.setText(Double.toString(movie.getRating_mediu()));
-            descriptionLabel.setText(movie.getDescription());
-            yearLabel.setText("Release date: " + movie.getRelease_date());
-
-            String imagePath = "/org/example/movie-posters/" + movie.getTitle() + ".jpg";
-            InputStream imageStream = getClass().getResourceAsStream(imagePath);
-            if (imageStream != null) {
-                moviePoster.setImage(new Image(imageStream));
-            } else {
-                InputStream defaultStream = getClass().getResourceAsStream("/org/example/movie-posters/default_poster.jpg");
-                if(defaultStream != null) {
-                    moviePoster.setImage(new Image(defaultStream));
-                }
-            }
-
-            Genre genre=genreDAO.getGenreById(movie.getId_genre());
-            if(genre!=null){
-               genreLabel.setText("Genre: "+genre.getGenre_name());
-            } else return ;
-        }else return ;
-    }
-
-    public void setCurrentUser(){
-        usernameLabel.setText(this.currentUser);
-    }
-
     @FXML
-    public void handleSubmitReview(ActionEvent event) throws Exception {
+    public void handleSubmitReview(ActionEvent event) {
         if (currentRating == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning!");
@@ -230,60 +171,38 @@ public class MovieDetailsController {
             return;
         }
 
-        Connection con = Database.getConnection();
-        JdbcUserDAO userDAO = new JdbcUserDAO(con);
-        JdbcViewDAO viewDAO = new JdbcViewDAO(con);
-        JdbcReviewDAO reviewDAO = new JdbcReviewDAO(con);
-
-        User loggedInUser = userDAO.getUserByName(currentUser);
-
-        if (loggedInUser != null) {
-            int id_view = viewDAO.getLastViewIdForMovie(loggedInUser.getId_user(), this.id_movie);
-
-            if (id_view == -1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Viewing Required");
-                alert.setContentText("You cannot review a movie you haven't watched. Please press PLAY first.");
-                alert.showAndWait();
-                return;
-            }
-
-            String commentText = commentArea.getText();
-            String predefinedOption = predefinedOptionComboBox.getValue();
-
-            if (commentText != null && commentText.trim().isEmpty()) {
-                commentText = null;
-            }
-            if (predefinedOption == null || predefinedOption.trim().isEmpty()) {
-                predefinedOption = "General";
-            }
-
-            reviewDAO.insertReview(id_view, currentRating, commentText, predefinedOption);
+        try {
+            detailsService.submitReview(
+                    currentUser,
+                    id_movie,
+                    currentRating,
+                    commentArea.getText(),
+                    predefinedOptionComboBox.getValue()
+            );
 
             commentArea.clear();
             predefinedOptionComboBox.setValue(null);
             currentRating = 0;
-
-            Label[] stars = {star1, star2, star3, star4, star5};
-            for (Label star : stars) {
-                star.setText("☆");
-            }
-
+            updateStarUI();
             loadReviews();
+
+        } catch (IllegalStateException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Action Required");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void loadReviews() throws Exception {
+    private void loadReviews() throws Exception {
         if (reviewsListContainer.getChildren().size() > 1) {
             reviewsListContainer.getChildren().remove(1, reviewsListContainer.getChildren().size());
         }
 
-        Connection con = Database.getConnection();
-        JdbcReviewDAO reviewDAO = new JdbcReviewDAO(con);
-        JdbcUserDAO userDAO = new JdbcUserDAO(con);
-
-        List<Review> reviews = reviewDAO.getReviewsByMovieId(this.id_movie);
+        List<Review> reviews = detailsService.getMovieReviews(this.id_movie);
 
         for (Review review : reviews) {
             VBox reviewCard = new VBox(5);
@@ -291,14 +210,15 @@ public class MovieDetailsController {
 
             String borderColor = "#333333";
             String backgroundColor = "#1e1e1e";
+            String sentiment = review.getSentimentScore();
 
-            if ("Positive".equalsIgnoreCase(review.getSentiment_score())) {
+            if ("Positive".equalsIgnoreCase(sentiment)) {
                 borderColor = "#2e7d32";
                 backgroundColor = "#1b2e1b";
-            } else if ("Negative".equalsIgnoreCase(review.getSentiment_score())) {
+            } else if ("Negative".equalsIgnoreCase(sentiment)) {
                 borderColor = "#c62828";
                 backgroundColor = "#331616";
-            } else if ("Neutral".equalsIgnoreCase(review.getSentiment_score())) {
+            } else if ("Neutral".equalsIgnoreCase(sentiment)) {
                 borderColor = "#757575";
                 backgroundColor = "#2a2a2a";
             }
@@ -307,14 +227,15 @@ public class MovieDetailsController {
                     "-fx-border-radius: 8; -fx-background-radius: 8; " +
                     "-fx-background-color: " + backgroundColor + ";");
 
-            String userName = userDAO.getUserFullNameByViewId(review.getId_view());
+            String userName = detailsService.getUserNameForReview(review.getIdView());
 
             Label nameAndRatingLabel = new Label(userName + " • Rating: " + review.getRating() + "/5 ★");
             nameAndRatingLabel.setStyle("-fx-text-fill: #e5e5e5; -fx-font-weight: bold; -fx-font-size: 14px;");
 
-            String displayText = (review.getComment_text() != null && !review.getComment_text().trim().isEmpty())
-                    ? review.getComment_text()
-                    : "Quick Tag: " + review.getPredefined_option();
+            String commentText = review.getCommentText();
+            String displayText = (commentText != null && !commentText.trim().isEmpty())
+                    ? commentText
+                    : "Quick Tag: " + review.getPredefinedOption();
 
             Label textLabel = new Label(displayText);
             textLabel.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
@@ -326,92 +247,50 @@ public class MovieDetailsController {
     }
 
     @FXML
-    public void handleWatchMovie(ActionEvent event) throws Exception {
+    public void handleWatchMovie(ActionEvent event) {
+        try {
+            int watchedMinutes = detailsService.watchMovie(
+                    currentUser,
+                    id_movie,
+                    formatComboBox.getValue(),
+                    languageComboBox.getValue()
+            );
 
-        String language=languageComboBox.getValue();
-        String format=formatComboBox.getValue();
+            Movie movie = detailsService.getMovieById(id_movie);
 
-        if(language==null || format==null || language.trim().isEmpty() || format.trim().isEmpty()){
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Success!");
+
+            if (watchedMinutes != movie.getMovieDuration()) {
+                successAlert.setHeaderText("Enjoy the movie!");
+                successAlert.setContentText("You watched " + watchedMinutes + " minutes of the movie.");
+            } else {
+                successAlert.setHeaderText("Hope you enjoyed the movie!");
+                successAlert.setContentText("You watched the whole movie!🥳");
+            }
+            successAlert.showAndWait();
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Attention!");
-            alert.setHeaderText("Format or Language Empty");
-            alert.setContentText("You must choose a format and a language in order to watch the movie!");
+            alert.setHeaderText("Action failed");
+            alert.setContentText(e.getMessage());
             alert.showAndWait();
-
-            return ;
-        }
-
-        Connection con=Database.getConnection();
-        JdbcVersionDAO versionDAO=new JdbcVersionDAO(con);
-
-        int id_version=versionDAO.getIdVersionByIdMovie(id_movie,format,language);
-
-        if (id_version != -1) {
-            JdbcUserDAO userDAO = new JdbcUserDAO(con);
-            User user = userDAO.getUserByName(currentUser);
-
-            if (user != null) {
-                JdbcViewDAO viewDAO = new JdbcViewDAO(con);
-                JdbcMovieDAO movieDAO = new JdbcMovieDAO(con);
-                Random random = new Random();
-
-                Movie movie = movieDAO.getMovieById(id_movie);
-
-                int movie_duration = movie.getMovie_duration();
-                int id_user = user.getId_user();
-
-                int previous_minutes = viewDAO.getPreviousWatchedMinutes(id_user, id_version);
-                int watched_minutes;
-
-                if (previous_minutes >= movie_duration) {
-                    watched_minutes = movie_duration;
-
-                } else if (previous_minutes > 0) {
-                    int min = previous_minutes + 1;
-                    int max = movie_duration;
-                    watched_minutes = random.nextInt(max - min + 1) + min;
-
-                } else {
-                    watched_minutes = random.nextInt(movie_duration) + 1;
-
-                }
-
-                viewDAO.createView(id_user, id_version, watched_minutes);
-
-                if(watched_minutes!=movie_duration)
-                {
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Success!");
-                    successAlert.setHeaderText("Enjoy the movie!");
-                    successAlert.setContentText("You watched " + watched_minutes + " minutes of the movie.");
-                    successAlert.showAndWait();
-                }else{
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Success!");
-                    successAlert.setHeaderText("Hope you enjoyed the movie!");
-                    successAlert.setContentText("You watched the whole movie!🥳");
-                    successAlert.showAndWait();
-                }
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
     public void handleStarClick(MouseEvent event) {
         Label clickedStar = (Label) event.getSource();
-
         String starId = clickedStar.getId();
-
         this.currentRating = Integer.parseInt(starId.replace("star", ""));
-
         updateStarUI();
-
-
     }
 
     private void updateStarUI() {
         Label[] stars = {star1, star2, star3, star4, star5};
-
         for (int i = 0; i < stars.length; i++) {
             if (i < currentRating) {
                 stars[i].setText("★");
@@ -423,17 +302,14 @@ public class MovieDetailsController {
 
     @FXML
     public void handleGoBack(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/proiect_sgbd_vizionare_filme/dashboard.fxml"));
+        Parent root = loader.load();
 
-        FXMLLoader loader=new FXMLLoader(getClass().getResource("/org/example/proiect_sgbd_vizionare_filme/dashboard.fxml"));
-        Parent root=loader.load();
-
-        DashBoardController dashBoardController=loader.getController();
+        DashBoardController dashBoardController = loader.getController();
         dashBoardController.setLoggedInUser(currentUser);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
         stage.setFullScreen(true);
         stage.show();
     }

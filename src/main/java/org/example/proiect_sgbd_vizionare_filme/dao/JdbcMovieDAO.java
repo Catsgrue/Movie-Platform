@@ -1,5 +1,6 @@
 package org.example.proiect_sgbd_vizionare_filme.dao;
 
+import org.example.proiect_sgbd_vizionare_filme.daoInterfaces.MovieDAO;
 import org.example.proiect_sgbd_vizionare_filme.entities.Movie;
 
 import java.sql.*;
@@ -30,7 +31,8 @@ public class JdbcMovieDAO implements MovieDAO {
                         rs.getInt("id_genre"),
                         rs.getInt("movie_duration"),
                         rs.getDate("release_date"),
-                        rs.getDouble("rating_mediu")
+                        rs.getDouble("rating_mediu"),
+                        rs.getString("image_url")
                 ));
             }
 
@@ -56,7 +58,8 @@ public class JdbcMovieDAO implements MovieDAO {
                             rs.getInt("id_genre"),
                             rs.getInt("movie_duration"),
                             rs.getDate("release_date"),
-                            rs.getDouble("rating_mediu")
+                            rs.getDouble("rating_mediu"),
+                            rs.getString("image_url")
                     );
                 }
             }
@@ -120,7 +123,8 @@ public class JdbcMovieDAO implements MovieDAO {
                             rs.getInt("id_genre"),
                             rs.getInt("movie_duration"),
                             rs.getDate("release_date"),
-                            rs.getDouble("rating_mediu")
+                            rs.getDouble("rating_mediu"),
+                            rs.getString("image_url")
                     ));
                 }
             }

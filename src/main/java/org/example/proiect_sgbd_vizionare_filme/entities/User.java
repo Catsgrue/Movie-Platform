@@ -2,29 +2,29 @@ package org.example.proiect_sgbd_vizionare_filme.entities;
 
 public class User {
 
-    private int id_user;
-    private String first_name;
-    private String last_name;
+    private int id;
+    private String firstName;
+    private String lastName;
     private String email;
     private String city;
 
-    public User(int id_user, String first_name, String last_name, String email, String city) {
-        this.id_user = id_user;
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public User(int id, String firstName, String lastName, String email, String city) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.city = city;
     }
 
-    public int getId_user() {
-        return id_user;
+    public int getId() {
+        return id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 }

@@ -2,43 +2,43 @@ package org.example.proiect_sgbd_vizionare_filme.entities;
 
 public class Review {
 
-    private int id_review;
-    private int id_view;
+    private int id;
+    private int idView;
     private int rating;
-    private String comment_text;
-    private String predefined_option;
-    private String sentiment_score;
+    private String commentText;
+    private String predefinedOption;
+    private String sentimentScore;
 
-    public Review(int id_review, int id_view, int rating, String comment_text, String predefined_option, String sentiment_score) {
-        this.id_review = id_review;
-        this.id_view = id_view;
+    public Review(int id, int idView, int rating, String commentText, String predefinedOption, String sentimentScore) {
+        this.id = id;
+        this.idView = idView;
         this.rating = rating;
-        this.comment_text = comment_text;
-        this.predefined_option = predefined_option;
-        this.sentiment_score = sentiment_score;
+        this.commentText = commentText;
+        this.predefinedOption = predefinedOption;
+        this.sentimentScore = sentimentScore;
     }
 
-    public int getId_review() {
-        return id_review;
+    public int getId() {
+        return id;
     }
 
-    public int getId_view() {
-        return id_view;
+    public int getIdView() {
+        return idView;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public String getComment_text() {
-        return comment_text;
+    public String getCommentText() {
+        return commentText;
     }
 
-    public String getPredefined_option() {
-        return predefined_option;
+    public String getPredefinedOption() {
+        return predefinedOption;
     }
 
-    public String getSentiment_score() {
-        return sentiment_score;
+    public String getSentimentScore() {
+        return sentimentScore;
     }
 }

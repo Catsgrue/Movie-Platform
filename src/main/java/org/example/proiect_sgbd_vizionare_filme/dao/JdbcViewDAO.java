@@ -1,5 +1,7 @@
 package org.example.proiect_sgbd_vizionare_filme.dao;
 
+import org.example.proiect_sgbd_vizionare_filme.daoInterfaces.ViewDAO;
+
 import java.sql.*;
 
 public class JdbcViewDAO implements ViewDAO {

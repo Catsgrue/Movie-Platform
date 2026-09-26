@@ -1,5 +1,6 @@
 package org.example.proiect_sgbd_vizionare_filme.dao;
 
+import org.example.proiect_sgbd_vizionare_filme.daoInterfaces.GenreDAO;
 import org.example.proiect_sgbd_vizionare_filme.entities.Genre;
 
 import java.sql.Connection;

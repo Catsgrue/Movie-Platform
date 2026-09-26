@@ -1,5 +1,6 @@
 package org.example.proiect_sgbd_vizionare_filme.dao;
 
+import org.example.proiect_sgbd_vizionare_filme.daoInterfaces.ActorDAO;
 import org.example.proiect_sgbd_vizionare_filme.entities.Actor;
 
 import java.sql.Connection;
@@ -36,7 +37,8 @@ public class JdbcActorDAO implements ActorDAO {
                                 rs.getString("stage_name"),
                                 rs.getString("first_name"),
                                 rs.getString("last_name"),
-                                rs.getDate("date_of_birth")
+                                rs.getDate("date_of_birth"),
+                                rs.getString("image_url")
                         ));
                     }
                 }

@@ -10,12 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import org.example.proiect_sgbd_vizionare_filme.dao.JdbcUserDAO;
-import org.example.proiect_sgbd_vizionare_filme.entities.User;
-import org.example.proiect_sgbd_vizionare_filme.config.Database;
+import org.example.proiect_sgbd_vizionare_filme.services.UserService;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.List;
 
 public class LoginController {
@@ -26,36 +23,35 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    public void populateUserContainer() throws Exception {
-        Connection con= Database.getConnection();
-        JdbcUserDAO userDAO = new JdbcUserDAO(con);
-
-        List<User> users= userDAO.getAllUsers();
-
-        for( var u: users){
-            userComboBox.getItems().add(u.getFirst_name() + " " + u.getLast_name());
-        }
-    }
-
+    private final UserService userService = new UserService();
 
     @FXML
-    public void initialize() throws  Exception{
-        populateUserContainer();
+    public void initialize() {
+        try {
+            List<String> userNames = userService.getAllUserNames();
+            userComboBox.getItems().addAll(userNames);
+        } catch (Exception e) {
 
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Database failure");
+            alert.setContentText("The server is shut down.");
+            alert.showAndWait();
+
+            System.err.println("Critical error loading users: " + e.getMessage());
+        }
     }
 
     @FXML
     public void handleLogin(ActionEvent event) throws IOException {
-
         String selectedUser = userComboBox.getValue();
 
         if (selectedUser == null || selectedUser.trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Atenție");
-            alert.setHeaderText("Logare eșuată");
-            alert.setContentText("Te rog să selectezi un cont din listă pentru a continua!");
+            alert.setTitle("WARNING");
+            alert.setHeaderText("Login failed");
+            alert.setContentText("Please select an account from the list to continue!");
             alert.showAndWait();
-
             return;
         }
 
